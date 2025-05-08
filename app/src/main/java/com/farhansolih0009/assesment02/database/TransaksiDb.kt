@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.farhansolih0009.assesment02.model.Transaksi
 
-@Database(entities = [Transaksi::class], version = 1, exportSchema = false)
+@Database(entities = [Transaksi::class], version = 2, exportSchema = false)  // Incremented version
 abstract class TransaksiDb : RoomDatabase() {
 
     abstract val dao: TransaksiDao
@@ -25,7 +25,10 @@ abstract class TransaksiDb : RoomDatabase() {
                         context.applicationContext,
                         TransaksiDb::class.java,
                         "transaksi.db"
-                    ).build()
+                    )
+                        // Apply migration here (if necessary)
+                        .fallbackToDestructiveMigration()  // Clears the database and recreates on schema changes
+                        .build()
                     INSTANCE = instance
                 }
                 return instance

@@ -1,3 +1,21 @@
 <resources>
-    <string name="app_name">Assesment02</string>
+    <string name="app_name">Kelola Saku</string>
+    <string name="list_kosong">Belum ada transaksi</string>
+    <string name="x_diklik">%1$s diklik!</string>
+    <string name="tambah_transaksi">Tambah transaksi</string>
+    <string name="judul">Judul</string>
+    <string name="isi_transaksi">Isi Transaksi</string>
+    <string name="kembali">Kembali</string>
+    <string name="simpan">Simpan</string>
+    <string name="edit_transaksi">Ubah catatan</string>
+    <string name="invalid">Nominal tidak boleh kosong.</string>
+    <string name="lainnya">Opsi lainnya</string>
+    <string name="hapus">Hapus catatan</string>
+    <string name="pesan_hapus">Hapus transaksi ini?</string>
+    <string name="tombol_hapus">Hapus</string>
+    <string name="tombol_batal">Batal</string>
+    <string name="list">Tampilkan list</string>
+    <string name="grid">Tampilkan grid</string>
+    <string name="nominal">Rp ...</string>
+    <string name="tipe_transaksi">Pengeluaran / Pemasukan</string>
 </resources>
