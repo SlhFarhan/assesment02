@@ -17,7 +17,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DividerDefaults
@@ -34,9 +34,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,7 +60,7 @@ import com.farhansolih0009.assesment02.util.ViewModelFactory
 @Composable
 fun MainScreen(navController: NavHostController) {
     val context = LocalContext.current
-    val db = TransaksiDb.getInstance(context)  // Update here for TransaksiDb
+    val db = TransaksiDb.getInstance(context)
     val factory = ViewModelFactory(db.dao)
     val viewModel: MainViewModel = viewModel(factory = factory)
     val data by viewModel.data.collectAsState()
@@ -65,6 +68,9 @@ fun MainScreen(navController: NavHostController) {
     // Calculate total Pemasukan (Income) and Pengeluaran (Expenditure)
     val totalPemasukan = data.filter { it.tipe == "Pemasukan" }.sumOf { it.nominal }
     val totalPengeluaran = data.filter { it.tipe == "Pengeluaran" }.sumOf { it.nominal }
+
+    // State to manage grid or list view toggle
+    val (showList, setShowList) = remember { mutableStateOf(true) }
 
     Scaffold(
         topBar = {
@@ -89,18 +95,33 @@ fun MainScreen(navController: NavHostController) {
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 actions = {
-                    // Recycle Bin Button
+                    // Trash Bin Button (Recycle Bin Icon changed to Delete Icon)
                     IconButton(onClick = {
                         navController.navigate(Screen.RecycleBin.route) // Navigate to the Recycle Bin
                     }) {
                         Icon(
-                            imageVector = Icons.Filled.MoreVert,
+                            imageVector = Icons.Filled.Delete,  // Changed to trash bin icon
                             contentDescription = "Go to Recycle Bin",
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
 
-                    // Other actions like view toggle can be added here if needed
+                    // View Toggle Button (Grid/List)
+                    IconButton(onClick = {
+                        setShowList(!showList)  // Toggle between grid and list view
+                    }) {
+                        Icon(
+                            painter = painterResource(
+                                if (showList) R.drawable.baseline_grid_view_24
+                                else R.drawable.baseline_view_list_24
+                            ),
+                            contentDescription = stringResource(
+                                if (showList) R.string.grid
+                                else R.string.list
+                            ),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             )
         },
@@ -119,13 +140,8 @@ fun MainScreen(navController: NavHostController) {
         }
     ) { innerPadding ->
         // Toggle between list and grid view
-        ScreenContent(showList = true, modifier = Modifier.padding(innerPadding), navController = navController)
+        ScreenContent(showList = showList, modifier = Modifier.padding(innerPadding), navController = navController)
     }
-}
-
-// Extension function to format currency
-fun Double.formatCurrency(): String {
-    return "Rp ${this.toBigDecimal().setScale(0, java.math.RoundingMode.HALF_EVEN).toPlainString()}"
 }
 
 @Composable
@@ -135,7 +151,7 @@ fun ScreenContent(
     navController: NavHostController
 ) {
     val context = LocalContext.current
-    val db = TransaksiDb.getInstance(context)  // Update here for TransaksiDb
+    val db = TransaksiDb.getInstance(context)
     val factory = ViewModelFactory(db.dao)
     val viewModel: MainViewModel = viewModel(factory = factory)
     val data by viewModel.data.collectAsState()
@@ -148,8 +164,7 @@ fun ScreenContent(
         ) {
             Text(text = stringResource(id = R.string.list_kosong))
         }
-    }
-    else {
+    } else {
         if (showList) {
             LazyColumn(
                 modifier = modifier.fillMaxSize(),
@@ -162,8 +177,7 @@ fun ScreenContent(
                     HorizontalDivider()
                 }
             }
-        }
-        else {
+        } else {
             LazyVerticalStaggeredGrid(
                 modifier = modifier.fillMaxSize(),
                 columns = StaggeredGridCells.Fixed(2),
@@ -180,6 +194,12 @@ fun ScreenContent(
         }
     }
 }
+
+
+fun Double.formatCurrency(): String {
+    return "Rp ${this.toBigDecimal().setScale(0, java.math.RoundingMode.HALF_EVEN).toPlainString()}"
+}
+
 
 @Composable
 fun ListItem(transaksi: Transaksi, onClick: () -> Unit) {
@@ -241,4 +261,3 @@ fun MainScreenPreview() {
         MainScreen(rememberNavController())
     }
 }
-
