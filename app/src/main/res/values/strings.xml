@@ -8,7 +8,7 @@
     <string name="kembali">Kembali</string>
     <string name="simpan">Simpan</string>
     <string name="edit_transaksi">Ubah catatan</string>
-    <string name="invalid">Nominal tidak boleh kosong.</string>
+    <string name="invalid">Kategori dan Nominal tidak boleh kosong.</string>
     <string name="lainnya">Opsi lainnya</string>
     <string name="hapus">Hapus catatan</string>
     <string name="pesan_hapus">Hapus transaksi ini?</string>
@@ -16,6 +16,10 @@
     <string name="tombol_batal">Batal</string>
     <string name="list">Tampilkan list</string>
     <string name="grid">Tampilkan grid</string>
-    <string name="nominal">Rp ...</string>
+    <string name="nominal">Rp …</string>
     <string name="tipe_transaksi">Pengeluaran / Pemasukan</string>
+    <string name="konfirmasi_hapus_permanent">Apakah anda yakin untuk menghapus transaksi ini secara permanent?</string>
+    <string name="hapus_permanent">Hapus Permanent</string>
+    <string name="restore">Pulihkan</string>
+    <string name="kotak_sampah">Kotak Sampah</string>
 </resources>
